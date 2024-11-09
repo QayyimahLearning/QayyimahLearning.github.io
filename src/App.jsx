@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
+import { Modal } from 'react-responsive-modal';
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'react-responsive-modal/styles.css';
+
 import image1 from "./assets/images/1.jpg";
 import image2 from "./assets/images/2.jpg";
 import image3 from "./assets/images/3.jpg";
 import image4 from "./assets/images/4.jpg";
 
+import "./assets/css/App.css";
+
 const App = () => {
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
   const courses = [
     {
       id: 1,
@@ -40,6 +47,13 @@ const App = () => {
       link: "https://youtube.com/playlist?list=PLqrNM_MyAebyRSHoJ3niw6OkoL4btpL0Z&si=554WeE6MiVvGtgmZ"
     }
   ];
+
+  // Function to extract playlist ID from URL
+  const getPlaylistId = (url) => {
+    const regex = /[?&]list=([^&]+)/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+  };
 
   return (
     <div className="container my-4">
@@ -124,7 +138,7 @@ const App = () => {
                     }}
                     onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
                     onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-                    onClick={() => window.open(course.link, '_blank')}
+                    onClick={() => setSelectedVideo(getPlaylistId(course.link))}
                   >
                     START LEARNING
                   </button>
@@ -134,6 +148,36 @@ const App = () => {
           </div>
         ))}
       </div>
+
+      <Modal
+        open={selectedVideo !== null}
+        onClose={() => setSelectedVideo(null)}
+        center
+        classNames={{
+          modal: 'customModal',
+          overlay: 'customOverlay',
+        }}
+        styles={{
+          modal: {
+            background: "#fff",
+            maxWidth: '900px',
+            width: '90%',
+            padding: '0',
+          },
+          overlay: {
+            background: "rgba(0, 0, 0, 0.75)",
+          },
+        }}
+      >
+        <div className="ratio ratio-16x9">
+          <iframe
+            src={`https://www.youtube.com/embed/videoseries?list=${selectedVideo}`}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </Modal>
     </div>
   );
 };

@@ -1,0 +1,26 @@
+.customModal {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.customOverlay {
+  backdrop-filter: blur(2px);
+}
+
+/* Optional: Add animation */
+.react-responsive-modal-overlay,
+.react-responsive-modal-container,
+.react-responsive-modal-modal {
+  animation: customEnterAnimation 0.3s ease-in-out;
+}
+
+@keyframes customEnterAnimation {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
