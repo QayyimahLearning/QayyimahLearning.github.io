@@ -1,8 +1,13 @@
-# React + Vite
+# Student Journey
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple app to help beginner students of knowledge to navigate the journey of learning Islam.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React
+- Vite
+- React Responsive Modal
+- React Icons
+- React Youtube
+
+May Allah guide us all to the truth and grant us the ability to understand and implement it in our daily lives.

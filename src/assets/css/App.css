@@ -24,3 +24,147 @@
     transform: scale(1);
   }
 }
+
+/* Dark mode styles */
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+    transition: all 0.3s ease;
+  }
+  
+  .light-mode {
+    background-color: #ffffff;
+    color: #000000;
+    transition: all 0.3s ease;
+  }
+  
+  /* Toggle button styles */
+  .theme-toggle-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  /* Dark mode toggle button */
+  .dark-mode .theme-toggle-btn {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .theme-toggle-btn:hover {
+    transform: scale(1.1);
+  }
+  
+  .theme-toggle-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .icon-container {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .sun-icon,
+  .moon-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 0.3s ease;
+  }
+  
+  /* Light mode icons */
+  .light-mode .theme-toggle-btn {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .light-mode .sun-icon {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
+    color: #ff9800;
+  }
+  
+  .light-mode .moon-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  
+  /* Dark mode icons */
+  .dark-mode .theme-toggle-btn {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  .dark-mode .sun-icon {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-90deg);
+  }
+  
+  .dark-mode .moon-icon {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(0deg);
+    color: #ffffff;
+  }
+  
+  /* Media queries for responsive sizing */
+  @media (max-width: 576px) {
+    .theme-toggle-btn {
+      width: 32px;
+      height: 32px;
+    }
+  
+    .icon-container {
+      width: 18px;
+      height: 18px;
+    }
+  
+    .sun-icon,
+    .moon-icon {
+      width: 18px;
+      height: 18px;
+    }
+  }
+  
+  /* Add touch device optimizations */
+  @media (hover: none) {
+    .theme-toggle-btn:hover {
+      transform: none;
+    }
+  }
+  
+  /* Update card styles for dark mode */
+  .dark-mode .card {
+    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    border-color: #404040;
+  }
+  
+  .dark-mode .card-title {
+    color: #ffffff;
+  }
+  
+  .dark-mode .card-text {
+    color: #e0e0e0;
+  }
+  
+  .dark-mode .text-muted {
+    color: #a0a0a0 !important;
+  }
+  
+  /* Add smooth transitions to all elements */
+  * {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  }
