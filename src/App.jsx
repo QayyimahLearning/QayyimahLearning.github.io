@@ -109,7 +109,7 @@ const App = () => {
         </button>
       </div>
 
-      <header className="mb-5" style={{ 
+      <header className="mb-5 position-relative" style={{ 
         background: isDarkMode 
           ? 'linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%)'
           : 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)',
@@ -118,9 +118,32 @@ const App = () => {
         color: 'white',
         boxShadow: isDarkMode 
           ? '0 4px 20px rgba(0,0,0,0.3)'
-          : '0 4px 20px rgba(0,0,0,0.1)'
+          : '0 4px 20px rgba(0,0,0,0.1)',
+        paddingTop: '3.5rem'
       }}>
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        <div 
+          className={`position-absolute start-50 translate-middle-x ${isDarkMode ? 'text-light' : 'text-white'}`}
+          style={{ 
+            top: '1.5rem',
+            whiteSpace: 'nowrap',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}
+        >
+          <span 
+            className={`${isDarkMode ? 'bg-light' : 'bg-white'}`}
+            style={{ width: "4px", height: "16px" }}
+          ></span>
+          <p 
+            className="mb-0 text-uppercase"
+            style={{ letterSpacing: '1px', fontSize: '0.85rem' }}
+          >
+            Student Journey | Learn Islam
+          </p>
+        </div>
+
+        <div className="d-flex justify-content-between align-items-center mb-4" style={{ marginTop: '2rem' }}>
           <button
             className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-white'} px-3 rounded-circle`}
             onClick={() => setActiveProgram(getPrevProgram(activeProgram))}
@@ -179,18 +202,6 @@ const App = () => {
               </>
             ) : (
               <>
-                <div className="d-flex align-items-center justify-content-center mb-4">
-                  <span 
-                    className={`${isDarkMode ? 'bg-light' : 'bg-white'}`}
-                    style={{ width: "4px", height: "16px" }}
-                  ></span>
-                  <p 
-                    className={`ms-2 mb-0 text-uppercase ${isDarkMode ? 'text-light' : 'text-white'}`}
-                    style={{ letterSpacing: '1px', fontSize: '0.85rem' }}
-                  >
-                    Student Journey | Learn Islam
-                  </p>
-                </div>
                 <h1 className="fw-bold text-center fs-2 fs-md-1">
                   {programs?.[activeProgram]?.pTitle}
                 </h1>
