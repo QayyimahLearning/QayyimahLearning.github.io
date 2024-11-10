@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from 'react-responsive-modal';
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-responsive-modal/styles.css';
 
 import "./assets/css/App.css";
@@ -11,7 +12,8 @@ const App = () => {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode ? JSON.parse(savedMode) : false;
   });
-  const [courses, setCourses] = useState(JSON.parse(localStorage.getItem('courses')) || []);
+  const [activeLevel, setActiveLevel] = useState('basic');
+  const [courses, setCourses] = useState(localStorage.getItem('courses') ? JSON.parse(localStorage.getItem('courses')) : null);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -38,7 +40,7 @@ const App = () => {
     const fetchCourses = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwvCC5mLri89uvqjeT-lxhDC_EHm0KwOMcWRk6jPh2_aMVmT_nWeRfSG4xBnaV18UtI/exec');
+        const response = await fetch('https://script.google.com/macros/s/AKfycbzCMYoqlVSXJomF0nsbfGz5Td12RBo7gvQz5na6bgA9P-3wyFv_VB2r9g7S_jhw3-Iy/exec');
         const data = await response.json();
         setCourses(data);
         setIsLoading(false);
@@ -50,6 +52,19 @@ const App = () => {
     localStorage.setItem('courses', JSON.stringify(courses));
     fetchCourses();
   }, []);
+
+  // Add this helper function
+  const getNextLevel = (current) => {
+    const levels = Object.keys(courses);
+    const currentIndex = levels.indexOf(current);
+    return levels[currentIndex + 1] || current;
+  };
+
+  const getPrevLevel = (current) => {
+    const levels = Object.keys(courses);
+    const currentIndex = levels.indexOf(current);
+    return levels[currentIndex - 1] || current;
+  };
 
   return (
     <div className={`container my-4 ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -118,12 +133,38 @@ const App = () => {
         />
       </header>
 
-      <div className="text-center mb-4">
-        <button className="btn btn-dark fw-bold px-4 px-md-5">BASIC</button>
+      <div className="text-center mb-4 d-flex justify-content-center align-items-center gap-3">
+        <button
+          className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'} px-3`}
+          onClick={() => setActiveLevel(getPrevLevel(activeLevel))}
+          disabled={activeLevel === 'basic'}
+          style={{ opacity: activeLevel === 'advanced' ? 0.5 : 1 }}
+        >
+          <i className="bi bi-chevron-left"></i>
+        </button>
+        
+        <button
+          className={`btn ${isDarkMode ? 'btn-light' : 'btn-dark'} fw-bold px-4 px-md-5 text-uppercase`}
+          style={{
+            minWidth: '180px',
+            transition: 'all 0.3s ease',
+          }}
+        >
+          {activeLevel}
+        </button>
+
+        <button
+          className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'} px-3`}
+          onClick={() => setActiveLevel(getNextLevel(activeLevel))}
+          disabled={activeLevel === 'advanced'}
+          style={{ opacity: activeLevel === 'advanced' ? 0.5 : 1 }}
+        >
+          <i className="bi bi-chevron-right"></i>
+        </button>
       </div>
 
       <div className="row justify-content-center g-4">
-        {isLoading ? (
+        {isLoading && courses === null ? (
           <>
             {[1, 2].map((skeleton) => (
               <div key={skeleton} className="col-12 mb-4">
@@ -203,65 +244,83 @@ const App = () => {
             ))}
           </>
         ) : (
-          courses.map((course, index) => (
-            <div key={course.id} className="col-12">
-            <div className="card h-100" style={{
-              background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-              border: isDarkMode ? '1px solid #333' : '1px solid #dee2e6',
-              boxShadow: isDarkMode ? '0 2px 15px rgba(0,0,0,0.2)' : '0 2px 15px rgba(0,0,0,0.05)'
-            }}>
-              <div className="card-body p-3 p-md-4">
-                <div className="d-flex flex-column flex-md-row align-items-center gap-3">
-                  <img
-                    src={course.imageUrl}
-                    alt={course.title}
-                    className="rounded"
-                    style={{ 
-                      width: "100%", 
-                      maxWidth: "250px",
-                      height: "150px", 
-                      objectFit: "cover" 
-                    }}
-                  />
-                  <div className="flex-grow-1 text-center text-md-start">
-                    <div className="d-flex flex-column flex-md-row align-items-center mb-2 gap-2">
-                      <span 
-                        className={`${isDarkMode ? 'bg-light text-dark' : 'bg-dark text-white'} rounded-circle d-inline-flex align-items-center justify-content-center`}
-                        style={{ width: "35px", height: "35px", minWidth: "35px" }}
-                      >
-                        <span className="fw-bold">{index + 1}</span>
-                      </span>
-                      <div>
-                        <h5 className={`card-title mb-1 fw-bold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
-                          {course.title}
-                        </h5>
-                        <p className={`card-text mb-0 ${isDarkMode ? 'text-light' : 'text-secondary'}`}>
-                          By {course.instructor}
-                        </p>
-                        <p className={`card-text small mb-0 ${isDarkMode ? 'text-light opacity-75' : 'text-muted'}`}>
-                          {course.description}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <button 
-                    className={`btn ${isDarkMode ? 'btn-light' : 'btn-dark'} fw-bold px-4 py-3`}
-                    style={{ 
-                      borderRadius: '50px',
-                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                      transition: 'all 0.3s ease'
-                    }}
-                    onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
-                    onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-                    onClick={() => setSelectedVideo(getPlaylistId(course.link))}
-                  >
-                    START LEARNING
-                  </button>
+          courses[activeLevel].length === 0 ? (
+            <div className="col-12 text-center">
+              <div className="card h-100" style={{
+                background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                border: isDarkMode ? '1px solid #333' : '1px solid #dee2e6',
+                boxShadow: isDarkMode ? '0 2px 15px rgba(0,0,0,0.2)' : '0 2px 15px rgba(0,0,0,0.05)'
+              }}>
+                <div className="card-body p-5">
+                  <i className="bi bi-clock-history fs-1 mb-3"></i>
+                  <h3 className={`fw-bold ${isDarkMode ? 'text-light' : 'text-dark'}`}>Coming Soon</h3>
+                  <p className={`mb-0 ${isDarkMode ? 'text-light opacity-75' : 'text-muted'}`}>
+                    We're working on adding new courses for this level.
+                  </p>
                 </div>
               </div>
             </div>
-            </div>
-          ))
+          ) : (
+            courses[activeLevel].map((course, index) => (
+              <div key={course.id} className="col-12">
+              <div className="card h-100" style={{
+                background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                border: isDarkMode ? '1px solid #333' : '1px solid #dee2e6',
+                boxShadow: isDarkMode ? '0 2px 15px rgba(0,0,0,0.2)' : '0 2px 15px rgba(0,0,0,0.05)'
+              }}>
+                <div className="card-body p-3 p-md-4">
+                  <div className="d-flex flex-column flex-md-row align-items-center gap-3">
+                    <img
+                      src={course.imageUrl}
+                      alt={course.title}
+                      className="rounded"
+                      style={{ 
+                        width: "100%", 
+                        maxWidth: "250px",
+                        height: "150px", 
+                        objectFit: "cover" 
+                      }}
+                    />
+                    <div className="flex-grow-1 text-center text-md-start">
+                      <div className="d-flex flex-column flex-md-row align-items-center mb-2 gap-2">
+                        <span 
+                          className={`${isDarkMode ? 'bg-light text-dark' : 'bg-dark text-white'} rounded-circle d-inline-flex align-items-center justify-content-center`}
+                          style={{ width: "35px", height: "35px", minWidth: "35px" }}
+                        >
+                          <span className="fw-bold">{index + 1}</span>
+                        </span>
+                        <div>
+                          <h5 className={`card-title mb-1 fw-bold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
+                            {course.title}
+                          </h5>
+                          <p className={`card-text mb-0 ${isDarkMode ? 'text-light' : 'text-secondary'}`}>
+                            By {course.instructor}
+                          </p>
+                          <p className={`card-text small mb-0 ${isDarkMode ? 'text-light opacity-75' : 'text-muted'}`}>
+                            {course.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <button 
+                      className={`btn ${isDarkMode ? 'btn-light' : 'btn-dark'} fw-bold px-4 py-3`}
+                      style={{ 
+                        borderRadius: '50px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+                      onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+                      onClick={() => setSelectedVideo(getPlaylistId(course.link))}
+                    >
+                      START LEARNING
+                    </button>
+                  </div>
+                </div>
+              </div>
+              </div>
+            ))
+          )
         )}
       </div>
 
