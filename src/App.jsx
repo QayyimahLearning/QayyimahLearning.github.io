@@ -3,11 +3,6 @@ import { Modal } from 'react-responsive-modal';
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'react-responsive-modal/styles.css';
 
-import image1 from "./assets/images/1.jpg";
-import image2 from "./assets/images/2.jpg";
-import image3 from "./assets/images/3.jpg";
-import image4 from "./assets/images/4.jpg";
-
 import "./assets/css/App.css";
 
 const App = () => {
@@ -16,7 +11,9 @@ const App = () => {
     const savedMode = localStorage.getItem('darkMode');
     return savedMode ? JSON.parse(savedMode) : false;
   });
+  const [courses, setCourses] = useState(JSON.parse(localStorage.getItem('courses')) || []);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Update body color and save preference
   useEffect(() => {
@@ -28,47 +25,31 @@ const App = () => {
     setIsDarkMode(!isDarkMode);
   };
 
-  const courses = [
-    {
-      id: 1,
-      title: "Al-Qawāʿid al-Arbaʿ",
-      instructor: "Shaykh Muhammad ibn ‘Abdul-Wahhāb",
-      description: "القواعد الأربع للشيخ محمد بن عبد الوهاب",
-      imageUrl: image1,
-      link: "https://youtube.com/playlist?list=PLt11glGomoV3C1spZiZywOZOB5mYs7NQm&si=8GaES3aiea7vQDOJ"
-    },
-    {
-      id: 2,
-      title: "Thalāthat-ul-Uṣool",
-      instructor: "Shaykh Muhammad ibn ‘Abdul-Wahhāb",
-      description: "ثلاثة الأصول للشيخ محمد بن عبد الوهاب",
-      imageUrl: image2,
-      link: "https://youtube.com/playlist?list=PLt11glGomoV3x7_lEOUgZEPoo9d99UN5C&si=wwWKpQiqftKm8coR"
-    },
-    {
-      id: 3,
-      title: "Kashf ash-Shubuhāt",
-      instructor: "Shaykh Muhammad ibn ‘Abdul-Wahhāb",
-      description: "كشف الشبهات للشيخ محمد بن عبد الوهاب",
-      imageUrl: image3,
-      link: "https://youtube.com/playlist?list=PLv0gppFQn8KztTOUbzyx0jtr6_TE0MMpo&si=vOgiBA6nvNWRhAah"
-    },
-    {
-      id: 4,
-      title: "Kitāb at-Tawḥeed",
-      instructor: "Shaykh Muhammad ibn ‘Abdul-Wahhāb",
-      description: "كتاب التوحيد للشيخ محمد بن عبد الوهاب",
-      imageUrl: image4,
-      link: "https://youtube.com/playlist?list=PLqrNM_MyAebyRSHoJ3niw6OkoL4btpL0Z&si=554WeE6MiVvGtgmZ"
-    }
-  ];
-
   // Function to extract playlist ID from URL
   const getPlaylistId = (url) => {
     const regex = /[?&]list=([^&]+)/;
     const match = url.match(regex);
     return match ? match[1] : null;
   };
+
+  // Add useEffect to fetch courses
+  useEffect(() => {
+
+    const fetchCourses = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwvCC5mLri89uvqjeT-lxhDC_EHm0KwOMcWRk6jPh2_aMVmT_nWeRfSG4xBnaV18UtI/exec');
+        const data = await response.json();
+        setCourses(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+      }
+    };
+
+    localStorage.setItem('courses', JSON.stringify(courses));
+    fetchCourses();
+  }, []);
 
   return (
     <div className={`container my-4 ${isDarkMode ? 'dark-mode' : 'light-mode'}`}>
@@ -142,8 +123,88 @@ const App = () => {
       </div>
 
       <div className="row justify-content-center g-4">
-        {courses.map((course, index) => (
-          <div key={course.id} className="col-12">
+        {isLoading ? (
+          <>
+            {[1, 2].map((skeleton) => (
+              <div key={skeleton} className="col-12 mb-4">
+                <div className="card h-100" style={{
+                  background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                  border: isDarkMode ? '1px solid #333' : '1px solid #dee2e6',
+                  boxShadow: isDarkMode ? '0 2px 15px rgba(0,0,0,0.2)' : '0 2px 15px rgba(0,0,0,0.05)'
+                }}>
+                  <div className="card-body p-3 p-md-4">
+                    <div className="d-flex flex-column flex-md-row align-items-center gap-3">
+                      <div 
+                        className="skeleton-image rounded"
+                        style={{ 
+                          width: "100%",
+                          maxWidth: "250px",
+                          height: "150px",
+                          backgroundColor: isDarkMode ? '#333' : '#e9ecef',
+                          animation: 'pulse 1.5s infinite'
+                        }}
+                      ></div>
+                      <div className="flex-grow-1 text-center text-md-start" style={{ width: '100%' }}>
+                        <div className="d-flex flex-column flex-md-row align-items-center mb-2 gap-2">
+                          <div 
+                            className="skeleton-circle rounded-circle"
+                            style={{ 
+                              width: "35px",
+                              height: "35px",
+                              backgroundColor: isDarkMode ? '#333' : '#e9ecef',
+                              animation: 'pulse 1.5s infinite'
+                            }}
+                          ></div>
+                          <div style={{ width: '100%' }}>
+                            <div 
+                              className="skeleton-text mb-2"
+                              style={{ 
+                                height: "24px",
+                                width: "70%",
+                                backgroundColor: isDarkMode ? '#333' : '#e9ecef',
+                                animation: 'pulse 1.5s infinite'
+                              }}
+                            ></div>
+                            <div 
+                              className="skeleton-text mb-2"
+                              style={{ 
+                                height: "20px",
+                                width: "40%",
+                                backgroundColor: isDarkMode ? '#333' : '#e9ecef',
+                                animation: 'pulse 1.5s infinite'
+                              }}
+                            ></div>
+                            <div 
+                              className="skeleton-text"
+                              style={{ 
+                                height: "16px",
+                                width: "90%",
+                                backgroundColor: isDarkMode ? '#333' : '#e9ecef',
+                                animation: 'pulse 1.5s infinite'
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div 
+                        className="skeleton-button"
+                        style={{ 
+                          width: "150px",
+                          height: "48px",
+                          borderRadius: "50px",
+                          backgroundColor: isDarkMode ? '#333' : '#e9ecef',
+                          animation: 'pulse 1.5s infinite'
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          courses.map((course, index) => (
+            <div key={course.id} className="col-12">
             <div className="card h-100" style={{
               background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
               border: isDarkMode ? '1px solid #333' : '1px solid #dee2e6',
@@ -199,8 +260,9 @@ const App = () => {
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+            </div>
+          ))
+        )}
       </div>
 
       <Modal
