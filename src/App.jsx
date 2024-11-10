@@ -13,9 +13,15 @@ const App = () => {
     return savedMode ? JSON.parse(savedMode) : false;
   });
   const [activeLevel, setActiveLevel] = useState('basic');
-  const [courses, setCourses] = useState(localStorage.getItem('courses') ? JSON.parse(localStorage.getItem('courses')) : null);
+  const [courses, setCourses] = useState({
+    basic: [],
+    intermediate: [],
+    advanced: []
+  });
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [activeProgram, setActiveProgram] = useState('aqeeda');
+  const [programs, setPrograms] = useState(null);
 
   // Update body color and save preference
   useEffect(() => {
@@ -36,22 +42,32 @@ const App = () => {
 
   // Add useEffect to fetch courses
   useEffect(() => {
-
-    const fetchCourses = async () => {
+    const fetchPrograms = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('https://script.google.com/macros/s/AKfycbzCMYoqlVSXJomF0nsbfGz5Td12RBo7gvQz5na6bgA9P-3wyFv_VB2r9g7S_jhw3-Iy/exec');
+        const response = await fetch('https://script.google.com/macros/s/AKfycbyUSdC5_dCyhIia9bVuFkHWzpmRcwL7jjX5PK_m7m2pnuL_0JQgCVD67Sxbk8culKeZ/exec');
         const data = await response.json();
-        setCourses(data);
+        setPrograms(data.programs);
         setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching courses:', error);
+        console.error('Error fetching programs:', error);
       }
     };
-
-    localStorage.setItem('courses', JSON.stringify(courses));
-    fetchCourses();
+    fetchPrograms();
   }, []);
+
+  // Add these helper functions for program navigation
+  const getNextProgram = (current) => {
+    const programIds = Object.keys(programs || {});
+    const currentIndex = programIds.indexOf(current);
+    return programIds[currentIndex + 1] || current;
+  };
+
+  const getPrevProgram = (current) => {
+    const programIds = Object.keys(programs || {});
+    const currentIndex = programIds.indexOf(current);
+    return programIds[currentIndex - 1] || current;
+  };
 
   // Add this helper function
   const getNextLevel = (current) => {
@@ -95,8 +111,8 @@ const App = () => {
 
       <header className="mb-5" style={{ 
         background: isDarkMode 
-          ? 'linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%)'  // darker gradient for dark mode
-          : 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)', // original gradient for light mode
+          ? 'linear-gradient(135deg, #1e1e1e 0%, #2d2d2d 100%)'
+          : 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)',
         padding: '2rem',
         borderRadius: '10px',
         color: 'white',
@@ -104,24 +120,105 @@ const App = () => {
           ? '0 4px 20px rgba(0,0,0,0.3)'
           : '0 4px 20px rgba(0,0,0,0.1)'
       }}>
-        <div className="d-flex align-items-center mb-4">
-          <span 
-            className={`${isDarkMode ? 'bg-light' : 'bg-white'}`}
-            style={{ width: "4px", height: "16px" }}
-          ></span>
-          <p 
-            className={`ms-2 mb-0 text-uppercase ${isDarkMode ? 'text-light' : 'text-white'}`}
-            style={{ letterSpacing: '1px', fontSize: '0.85rem' }}
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <button
+            className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-white'} px-3 rounded-circle`}
+            onClick={() => setActiveProgram(getPrevProgram(activeProgram))}
+            disabled={activeProgram === Object.keys(programs || {})[0]}
+            style={{ 
+              opacity: activeProgram === Object.keys(programs || {})[0] ? 0.5 : 1,
+              width: '45px',
+              height: '45px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              background: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)'
+            }}
           >
-            Student Journey | Learn Islam
-          </p>
+            <i className="bi bi-chevron-left"></i>
+          </button>
+
+          <div className="text-center flex-grow-1">
+            {isLoading ? (
+              <>
+                <div className="d-flex align-items-center justify-content-center mb-4">
+                  <div 
+                    className="skeleton-text"
+                    style={{ 
+                      height: "16px",
+                      width: "200px",
+                      backgroundColor: isDarkMode ? '#333' : 'rgba(255,255,255,0.2)',
+                      animation: 'pulse 1.5s infinite',
+                      borderRadius: '4px'
+                    }}
+                  ></div>
+                </div>
+                <div 
+                  className="skeleton-text mb-3"
+                  style={{ 
+                    height: "40px",
+                    width: "60%",
+                    margin: "0 auto",
+                    backgroundColor: isDarkMode ? '#333' : 'rgba(255,255,255,0.2)',
+                    animation: 'pulse 1.5s infinite',
+                    borderRadius: '4px'
+                  }}
+                ></div>
+                <div 
+                  className="skeleton-text"
+                  style={{ 
+                    height: "24px",
+                    width: "80%",
+                    margin: "0 auto",
+                    backgroundColor: isDarkMode ? '#333' : 'rgba(255,255,255,0.2)',
+                    animation: 'pulse 1.5s infinite',
+                    borderRadius: '4px'
+                  }}
+                ></div>
+              </>
+            ) : (
+              <>
+                <div className="d-flex align-items-center justify-content-center mb-4">
+                  <span 
+                    className={`${isDarkMode ? 'bg-light' : 'bg-white'}`}
+                    style={{ width: "4px", height: "16px" }}
+                  ></span>
+                  <p 
+                    className={`ms-2 mb-0 text-uppercase ${isDarkMode ? 'text-light' : 'text-white'}`}
+                    style={{ letterSpacing: '1px', fontSize: '0.85rem' }}
+                  >
+                    Student Journey | Learn Islam
+                  </p>
+                </div>
+                <h1 className="fw-bold text-center fs-2 fs-md-1">
+                  {programs?.[activeProgram]?.pTitle}
+                </h1>
+                <p className="fs-5 text-center">
+                  {programs?.[activeProgram]?.pDescription}
+                </p>
+              </>
+            )}
+          </div>
+
+          <button
+            className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-white'} px-3 rounded-circle`}
+            onClick={() => setActiveProgram(getNextProgram(activeProgram))}
+            disabled={activeProgram === Object.keys(programs || {}).pop()}
+            style={{ 
+              opacity: activeProgram === Object.keys(programs || {}).pop() ? 0.5 : 1,
+              width: '45px',
+              height: '45px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              background: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)'
+            }}
+          >
+            <i className="bi bi-chevron-right"></i>
+          </button>
         </div>
-        <h1 className="fw-bold text-center fs-2 fs-md-1">
-          'Aqeedah & The Foundations of The Religion
-        </h1>
-        <p className="fs-5 fw-bold text-center">
-          العقيدة وأصول الدين
-        </p>
         <hr 
           className="mx-auto" 
           style={{ 
@@ -144,10 +241,18 @@ const App = () => {
         </button>
         
         <button
-          className={`btn ${isDarkMode ? 'btn-light' : 'btn-dark'} fw-bold px-4 px-md-5 text-uppercase`}
+          className={`btn fw-bold px-4 px-md-5 text-uppercase`}
           style={{
             minWidth: '180px',
             transition: 'all 0.3s ease',
+            background: isDarkMode 
+              ? 'white'
+              : 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)',
+            border: 'none',
+            color: isDarkMode ? '#1e1e1e' : 'white',
+            boxShadow: isDarkMode 
+              ? '0 4px 15px rgba(0,0,0,0.3)'
+              : '0 4px 15px rgba(0,0,0,0.1)'
           }}
         >
           {activeLevel}
@@ -164,7 +269,7 @@ const App = () => {
       </div>
 
       <div className="row justify-content-center g-4">
-        {isLoading && courses === null ? (
+        {isLoading ? (
           <>
             {[1, 2].map((skeleton) => (
               <div key={skeleton} className="col-12 mb-4">
@@ -244,7 +349,7 @@ const App = () => {
             ))}
           </>
         ) : (
-          courses[activeLevel].length === 0 ? (
+          programs?.[activeProgram]?.courses.filter(course => course.level === activeLevel).length === 0 ? (
             <div className="col-12 text-center">
               <div className="card h-100" style={{
                 background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
@@ -261,63 +366,68 @@ const App = () => {
               </div>
             </div>
           ) : (
-            courses[activeLevel].map((course, index) => (
+            programs?.[activeProgram]?.courses.map((course, index) => (
               <div key={course.id} className="col-12">
-              <div className="card h-100" style={{
-                background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-                border: isDarkMode ? '1px solid #333' : '1px solid #dee2e6',
-                boxShadow: isDarkMode ? '0 2px 15px rgba(0,0,0,0.2)' : '0 2px 15px rgba(0,0,0,0.05)'
-              }}>
-                <div className="card-body p-3 p-md-4">
-                  <div className="d-flex flex-column flex-md-row align-items-center gap-3">
-                    <img
-                      src={course.imageUrl}
-                      alt={course.title}
-                      className="rounded"
-                      style={{ 
-                        width: "100%", 
-                        maxWidth: "250px",
-                        height: "150px", 
-                        objectFit: "cover" 
-                      }}
-                    />
-                    <div className="flex-grow-1 text-center text-md-start">
-                      <div className="d-flex flex-column flex-md-row align-items-center mb-2 gap-2">
-                        <span 
-                          className={`${isDarkMode ? 'bg-light text-dark' : 'bg-dark text-white'} rounded-circle d-inline-flex align-items-center justify-content-center`}
-                          style={{ width: "35px", height: "35px", minWidth: "35px" }}
-                        >
-                          <span className="fw-bold">{index + 1}</span>
-                        </span>
-                        <div>
-                          <h5 className={`card-title mb-1 fw-bold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
-                            {course.title}
-                          </h5>
-                          <p className={`card-text mb-0 ${isDarkMode ? 'text-light' : 'text-secondary'}`}>
-                            By {course.instructor}
-                          </p>
-                          <p className={`card-text small mb-0 ${isDarkMode ? 'text-light opacity-75' : 'text-muted'}`}>
-                            {course.description}
-                          </p>
+                <div className="card h-100" style={{
+                  background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                  border: isDarkMode ? '1px solid #333' : '1px solid #dee2e6',
+                  boxShadow: isDarkMode ? '0 2px 15px rgba(0,0,0,0.2)' : '0 2px 15px rgba(0,0,0,0.05)'
+                }}>
+                  <div className="card-body p-3 p-md-4">
+                    <div className="d-flex flex-column flex-md-row align-items-center gap-3">
+                      <img
+                        src={course.imageUrl}
+                        alt={course.title}
+                        className="rounded"
+                        style={{ 
+                          width: "100%", 
+                          maxWidth: "250px",
+                          height: "150px", 
+                          objectFit: "cover" 
+                        }}
+                      />
+                      <div className="flex-grow-1 text-center text-md-start">
+                        <div className="d-flex flex-column flex-md-row align-items-center mb-2 gap-2">
+                          <span 
+                            className={`${isDarkMode ? 'bg-light text-dark' : 'bg-dark text-white'} rounded-circle d-inline-flex align-items-center justify-content-center`}
+                            style={{ width: "35px", height: "35px", minWidth: "35px" }}
+                          >
+                            <span className="fw-bold">{index + 1}</span>
+                          </span>
+                          <div>
+                            <h5 className={`card-title mb-1 fw-bold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
+                              {course.title}
+                            </h5>
+                            <p className={`card-text mb-0 ${isDarkMode ? 'text-light' : 'text-secondary'}`}>
+                              By {course.instructor}
+                            </p>
+                            <p className={`card-text small mb-0 ${isDarkMode ? 'text-light opacity-75' : 'text-muted'}`}>
+                              {course.description}
+                            </p>
+                          </div>
                         </div>
                       </div>
+                      <button 
+                        className="btn fw-bold px-4 py-3"
+                        style={{ 
+                          borderRadius: '50px',
+                          background: isDarkMode 
+                            ? 'white'
+                            : 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)',
+                          border: 'none',
+                          color: isDarkMode ? '#1e1e1e' : 'white',
+                          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                          transition: 'all 0.3s ease'
+                        }}
+                        onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
+                        onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+                        onClick={() => setSelectedVideo(getPlaylistId(course.link))}
+                      >
+                        START LEARNING
+                      </button>
                     </div>
-                    <button 
-                      className={`btn ${isDarkMode ? 'btn-light' : 'btn-dark'} fw-bold px-4 py-3`}
-                      style={{ 
-                        borderRadius: '50px',
-                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                        transition: 'all 0.3s ease'
-                      }}
-                      onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
-                      onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-                      onClick={() => setSelectedVideo(getPlaylistId(course.link))}
-                    >
-                      START LEARNING
-                    </button>
                   </div>
                 </div>
-              </div>
               </div>
             ))
           )
