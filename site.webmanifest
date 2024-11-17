@@ -1,0 +1,21 @@
+{
+  "name": "Qayyima Learning Platform",
+  "short_name": "Qayyima",
+  "icons": [
+    {
+      "src": "/student-journey-islam/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/student-journey-islam/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/student-journey-islam/",
+  "scope": "/student-journey-islam/",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
