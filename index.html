@@ -4,16 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Journey | Learn Islam</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/student-journey-islam/assets/apple-touch-icon-EEd8H9vW.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/student-journey-islam/assets/favicon-32x32-C_pMZQOv.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/student-journey-islam/assets/favicon-16x16-BApqFPGv.png">
-    <link rel="manifest" href="/student-journey-islam/assets/site-B0YXICst.webmanifest">
-    <link rel="icon" type="image/png" sizes="192x192" href="/student-journey-islam/assets/android-chrome-192x192-BKTSSz0Q.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/student-journey-islam/assets/android-chrome-512x512-CuNuL3ch.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/student-journey-islam/apple-touch-icon.png">
+    <link rel="icon" type="favicon/x-icon" href="/student-journey-islam/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/student-journey-islam/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/student-journey-islam/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/student-journey-islam/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/student-journey-islam/android-chrome-512x512.png">
+    <link rel="manifest" href="/student-journey-islam/site.webmanifest">
     <script type="module" crossorigin src="/student-journey-islam/assets/index-BEVlpHHK.js"></script>
     <link rel="stylesheet" crossorigin href="/student-journey-islam/assets/index-DZvY7zLm.css">
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          const swPath = import.meta.env.BASE_URL + 'sw.js';
+          navigator.serviceWorker.register(swPath)
+            .then(registration => {
+              console.log('ServiceWorker registration successful');
+            })
+            .catch(err => {
+              console.log('ServiceWorker registration failed: ', err);
+            });
+        });
+      }
+    </script>
   </body>
 </html>
