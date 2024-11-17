@@ -1,16 +1,18 @@
 const CACHE_NAME = 'qayyima-v1';
-const REPO_NAME = '/student-journey-islam';
+
+// Static assets we know we want to cache
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/src/main.jsx',
-  '/src/assets/images/android-chrome-192x192.png',
-  '/src/assets/images/android-chrome-512x512.png',
-  '/src/assets/images/favicon-32x32.png',
-  '/src/assets/images/favicon-16x16.png',
+  './',
+  './index.html',
+  './android-chrome-192x192.png',
+  './android-chrome-512x512.png',
+  './favicon-32x32.png',
+  './favicon-16x16.png',
+  './apple-touch-icon.png',
+  './site.webmanifest'
 ];
 
-// Install the service worker and cache assets
+// Install event - cache known assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -19,7 +21,7 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate the service worker and clean up old caches
+// Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -34,12 +36,41 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Intercept fetch requests and serve from cache if available
+// Fetch event - cache images dynamically
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
-      // Return cached version if available, otherwise fetch from network
-      return response || fetch(event.request);
+      // Return cached version if available
+      if (response) {
+        return response;
+      }
+
+      // Clone the request because it can only be used once
+      const fetchRequest = event.request.clone();
+
+      // Make the network request
+      return fetch(fetchRequest).then((response) => {
+        // Check if we received a valid response
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+
+        // Check if this is an image request
+        if (
+          response.headers.get('content-type')?.includes('image') || 
+          event.request.url.match(/\.(jpg|jpeg|png|gif|svg|webp)$/i)
+        ) {
+          // Clone the response because it can only be used once
+          const responseToCache = response.clone();
+
+          // Add the image to the cache
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+
+        return response;
+      });
     })
   );
 }); 
