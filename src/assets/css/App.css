@@ -204,3 +204,22 @@
   body::-webkit-scrollbar {
     display: none; /* Chrome, Safari and Opera */
   }
+
+  .install-prompt {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translate(-50%, 100%);
+    }
+    to {
+      transform: translate(-50%, 0);
+    }
+  }
+
+  @media (display-mode: standalone) {
+    .install-prompt {
+      display: none !important;
+    }
+  }
