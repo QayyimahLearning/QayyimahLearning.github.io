@@ -18,8 +18,7 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          const swPath = import.meta.env.BASE_URL + 'sw.js';
-          navigator.serviceWorker.register(swPath)
+          navigator.serviceWorker.register('./sw.js')
             .then(registration => {
               console.log('ServiceWorker registration successful');
             })
