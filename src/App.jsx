@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from 'react-responsive-modal';
+import { motion } from "framer-motion";
+
+import logoDark from './assets/images/logo-dark.png';
+import logoLight from './assets/images/logo-light.png';
+import animationLogoDark from './assets/images/animation-logo-dark.png';
+import animationLogoLight from './assets/images/animation-logo-light.png';
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'react-responsive-modal/styles.css';
-import { motion, AnimatePresence } from "framer-motion";
 
 import "./assets/css/App.css";
 
@@ -107,36 +113,28 @@ const App = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          background: '#ffffff',
+          background: isDarkMode ? '#121212' : '#ffffff',
           zIndex: 9999
         }}
       >
         <motion.div
           initial={{ scale: 1 }}
           animate={{ 
-            scale: 0.5,
-            x: window.innerWidth <= 768 ? -window.innerWidth/2 + 150 : -window.innerWidth/2 + 200,
-            y: window.innerWidth <= 768 ? -window.innerHeight/2 + 30 : -window.innerHeight/2 + 50,
+            scale: 0,
             transition: { 
               duration: 0.5,
               delay: 1.5
             }
           }}
-          className="d-flex align-items-center gap-3"
         >
-          <span 
-            style={{ width: "4px", height: "16px", background: "#2c3e50" }}
-          ></span>
-          <p 
-            className="mb-0 text-uppercase"
+          <img 
+            src={isDarkMode ? animationLogoLight : animationLogoDark}
+            alt="Logo"
             style={{ 
-              letterSpacing: '0.5px', 
-              fontSize: window.innerWidth <= 768 ? '0.55rem' : '0.85rem',
-              color: '#2c3e50'
+              height: window.innerWidth <= 768 ? '120px' : '250px',
+              width: 'auto'
             }}
-          >
-            Student Journey | Learn Islam
-          </p>
+          />
         </motion.div>
       </motion.div>
     );
@@ -170,14 +168,15 @@ const App = () => {
       </div>
 
       <div className="container my-4">
-        <nav className="d-flex align-items-center gap-3 mb-4">
-          <span 
+        <nav className="d-flex align-items-center mb-4">
+          <img 
+            src={isDarkMode ? logoLight : logoDark}
+            alt="Logo"
             style={{ 
-              width: "4px", 
-              height: "16px", 
-              background: isDarkMode ? '#fff' : '#2c3e50'
+              height: '50px',
+              width: 'auto'
             }}
-          ></span>
+          />
           <p 
             className="mb-0 text-uppercase"
             style={{ 
@@ -266,6 +265,20 @@ const App = () => {
                   <p className="fs-5 text-center">
                     {programs?.[activeProgram]?.pDescription}
                   </p>
+                  <div className="d-flex justify-content-center gap-2 mt-3">
+                    {Object.keys(programs || {}).map((program) => (
+                      <div
+                        key={program}
+                        style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          backgroundColor: program === activeProgram ? 'white' : 'rgba(255,255,255,0.3)',
+                          transition: 'all 0.3s ease'
+                        }}
+                      />
+                    ))}
+                  </div>
                 </>
               )}
             </div>
