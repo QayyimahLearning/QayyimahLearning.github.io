@@ -37,6 +37,9 @@ const App = () => {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
+  
+  // check for dev query param
+  const isDev = new URLSearchParams(window.location.search).get('dev') === 'true';
 
   // Use the custom hook for fetching programs
   const { programs, isLoading, error } = usePrograms();
@@ -91,7 +94,10 @@ const App = () => {
 
   // Define your release date (adjusted to IST)
   const releaseDate = "2024-12-06T09:00:00"; // 2:30 PM IST = 09:00 UTC
-  const isBeforeRelease = new Date() < new Date(releaseDate);
+  let isBeforeRelease = new Date() < new Date(releaseDate);
+  if (isDev) {
+    isBeforeRelease = false;
+  }
 
   // Show offline state before anything else
   if (!isOnline || error) {
