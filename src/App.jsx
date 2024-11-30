@@ -17,6 +17,7 @@ import { CourseCardSkeleton } from './components/LoadingSkeleton';
 import SplashScreen from './components/SplashScreen';
 import VideoPlayer from './components/VideoPlayer';
 import { usePrograms } from './hooks/usePrograms';
+import Countdown from './components/Countdown';
 
 import {
   getNextProgram,
@@ -88,11 +89,16 @@ const App = () => {
     }
   };
 
-  // Show offline state before splash screen
+  // Define your release date (adjusted to IST)
+  const releaseDate = "2024-12-06T09:00:00"; // 2:30 PM IST = 09:00 UTC
+  const isBeforeRelease = new Date() < new Date(releaseDate);
+
+  // Show offline state before anything else
   if (!isOnline || error) {
     return <Offline isDarkMode={isDarkMode} />;
   }
 
+  // Show splash screen next
   if (showSplash) {
     return (
       <SplashScreen 
@@ -103,6 +109,41 @@ const App = () => {
     );
   }
 
+  // Show countdown if before release date
+  if (isBeforeRelease) {
+    return (
+      <Layout
+        showInstallPrompt={showInstallPrompt}
+        isIOS={isIOS}
+        handleInstallClick={handleInstallClick}
+        setShowInstallPrompt={setShowInstallPrompt}
+        logoLight={logoLight}
+        logoDark={logoDark}
+      >
+        <div className="container d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
+          <div className="text-center">
+            <h2 
+              className={`mb-3 ${isDarkMode ? 'text-light' : 'text-dark'}`}
+            >
+              Coming Soon
+            </h2>
+            <p 
+              className={`mb-4 ${isDarkMode ? 'text-light opacity-75' : 'text-muted'}`}
+            >
+              Our platform will be available in:
+            </p>
+            <Countdown 
+              targetDate={releaseDate}
+              timezone="UTC"
+              isDarkMode={isDarkMode}
+            />
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  // Show main content after release date
   return (
     <Layout
       showInstallPrompt={showInstallPrompt}

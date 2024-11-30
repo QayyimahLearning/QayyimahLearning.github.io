@@ -1,12 +1,11 @@
 import React from 'react';
+import { motion, useAnimation } from 'framer-motion';
 
 const LEVELS = ['basic', 'intermediate', 'advanced'];
 
-const LevelSelector = ({ 
-  isDarkMode, 
-  activeLevel, 
-  setActiveLevel,
-}) => {
+const LevelSelector = ({ isDarkMode, activeLevel, setActiveLevel }) => {
+  const controls = useAnimation();
+
   const handlePrevLevel = () => {
     const currentIndex = LEVELS.indexOf(activeLevel);
     if (currentIndex > 0) {
@@ -21,6 +20,17 @@ const LevelSelector = ({
     }
   };
 
+  const handleDragEnd = async (event, info) => {
+    const SWIPE_THRESHOLD = 50;
+    if (info.offset.x > SWIPE_THRESHOLD && activeLevel !== 'basic') {
+      handlePrevLevel();
+    } else if (info.offset.x < -SWIPE_THRESHOLD && activeLevel !== 'advanced') {
+      handleNextLevel();
+    }
+    // Reset position
+    await controls.start({ x: 0 });
+  };
+
   return (
     <div className="text-center mb-4 d-flex justify-content-center align-items-center gap-3">
       <button
@@ -31,7 +41,11 @@ const LevelSelector = ({
         <i className="bi bi-chevron-left"></i>
       </button>
       
-      <button
+      <motion.button
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }}
+        onDragEnd={handleDragEnd}
+        animate={controls}
         className={`btn fw-bold px-4 px-md-5 text-uppercase`}
         style={{
           minWidth: '180px',
@@ -47,7 +61,7 @@ const LevelSelector = ({
         }}
       >
         {activeLevel}
-      </button>
+      </motion.button>
 
       <button
         className={`btn ${isDarkMode ? 'btn-outline-light' : 'btn-outline-dark'} px-3`}

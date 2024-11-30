@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import { HeaderSkeleton } from './LoadingSkeleton';
 
 const ProgramHeader = ({ 
@@ -12,6 +12,18 @@ const ProgramHeader = ({
   getNextProgram 
 }) => {
   const programKeys = programs ? Object.keys(programs) : [];
+  const controls = useAnimation();
+
+  const handleDragEnd = async (event, info) => {
+    const SWIPE_THRESHOLD = 50;
+    if (info.offset.x > SWIPE_THRESHOLD && !isLoading) {
+      getPrevProgram();
+    } else if (info.offset.x < -SWIPE_THRESHOLD && !isLoading) {
+      getNextProgram();
+    }
+    // Reset position
+    await controls.start({ x: 0 });
+  };
 
   return (
     <header className="mb-5" style={{ 
@@ -38,7 +50,13 @@ const ProgramHeader = ({
         {isLoading ? (
           <HeaderSkeleton isDarkMode={isDarkMode} />
         ) : (
-          <div className="text-center">
+          <motion.div 
+            className="text-center"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            onDragEnd={handleDragEnd}
+            animate={controls}
+          >
             <motion.h1
               key={`title-${activeProgram}`}
               initial={{ opacity: 0, y: 20 }}
@@ -60,7 +78,7 @@ const ProgramHeader = ({
             >
               {programs?.[activeProgram]?.pDescription}
             </motion.p>
-          </div>
+          </motion.div>
         )}
 
         <button
