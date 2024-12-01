@@ -6,6 +6,15 @@ import { db } from '../config/firebase';
 const NotificationCenter = ({ isDarkMode }) => {
   const [notifications, setNotifications] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
+  const [readNotifications, setReadNotifications] = useState(new Set());
+
+  useEffect(() => {
+    // Load read notifications from localStorage
+    const stored = localStorage.getItem('readNotifications');
+    if (stored) {
+      setReadNotifications(new Set(JSON.parse(stored)));
+    }
+  }, []);
 
   const fetchNotifications = async () => {
     try {
@@ -32,12 +41,27 @@ const NotificationCenter = ({ isDarkMode }) => {
     fetchNotifications();
   }, []);
 
+  const markAllAsRead = () => {
+    const notificationIds = notifications.map(n => n.id);
+    const newReadNotifications = new Set([...readNotifications, ...notificationIds]);
+    setReadNotifications(newReadNotifications);
+    localStorage.setItem('readNotifications', JSON.stringify([...newReadNotifications]));
+  };
+
+  // Calculate unread notifications
+  const unreadCount = notifications.filter(n => !readNotifications.has(n.id)).length;
+
   return (
     <>
       {/* Notification Bell */}
       <button
         className="notification-btn"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          setIsOpen(!isOpen);
+          if (!isOpen) {
+            markAllAsRead();
+          }
+        }}
         style={{ 
           color: isDarkMode ? 'white' : '#2c3e50',
           position: 'relative',
@@ -47,9 +71,9 @@ const NotificationCenter = ({ isDarkMode }) => {
         }}
       >
         <i className="bi bi-bell-fill fs-5"></i>
-        {notifications.length > 0 && (
+        {unreadCount > 0 && (
           <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {notifications.length}
+            {unreadCount}
           </span>
         )}
       </button>
