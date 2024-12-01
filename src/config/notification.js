@@ -1,5 +1,5 @@
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc, getDocs, query, where, collection, writeBatch } from 'firebase/firestore';
 import { app } from './firebase';
 
 const messaging = getMessaging(app);
@@ -56,20 +56,58 @@ export const requestNotificationPermission = async () => {
 
 const saveTokenToFirestore = async (token) => {
   try {
-    await setDoc(
-      doc(db, 'notification_tokens', token),
-      {
-        token,
-        createdAt: new Date(),
-        platform: navigator.platform,
-        userAgent: navigator.userAgent,
-        lastActive: new Date()
-      },
-      { merge: true }
-    );
+    const tokenRef = doc(db, 'notification_tokens', token);
+    
+    // Get the existing token document
+    const tokenDoc = await getDoc(tokenRef);
+    
+    const tokenData = {
+      token,
+      platform: navigator.platform,
+      userAgent: navigator.userAgent,
+      lastActive: new Date(),
+    };
+
+    if (!tokenDoc.exists()) {
+      // New token - add creation date
+      tokenData.createdAt = new Date();
+    }
+
+    // Update or create the token document
+    await setDoc(tokenRef, tokenData, { merge: true });
+    
+    // Optionally, clean up old tokens
+    await cleanupOldTokens();
+    
   } catch (error) {
     console.error('Error saving token to Firestore:', error);
     throw error;
+  }
+};
+
+// Optional: Clean up tokens older than X days
+const cleanupOldTokens = async () => {
+  try {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const q = query(
+      collection(db, 'notification_tokens'),
+      where('lastActive', '<', thirtyDaysAgo)
+    );
+
+    const snapshot = await getDocs(q);
+    const batch = writeBatch(db);
+    
+    snapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+
+    if (!snapshot.empty) {
+      await batch.commit();
+    }
+  } catch (error) {
+    console.error('Error cleaning up old tokens:', error);
   }
 };
 
