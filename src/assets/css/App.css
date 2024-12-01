@@ -91,6 +91,14 @@
   right: 1rem;
 }
 
+/* Notification panel for small screens */
+@media (max-width: 576px) {
+  .notification-panel {
+    width: 90%;
+    max-width: 90%;
+  }
+}
+
 /* Card styles for dark mode */
 .dark-mode .card {
   background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
