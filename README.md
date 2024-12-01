@@ -57,6 +57,31 @@ npm run build
 - `npm run lint` - Run ESLint
 - `npm run deploy` - Deploy to GitHub Pages
 
+### Environment Setup
+
+1. Create a `.env` file in the project root:
+
+```bash
+cp .env.example .env
+```
+
+2. Update the Firebase configuration variables in `.env`:
+
+```plaintext
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_auth_domain
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_storage_bucket
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_messaging_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+```
+
+3. Get these values from:
+
+- [Firebase Console](https://console.firebase.google.com/)
+- [Firebase Cloud Messaging](https://console.firebase.google.com/project/_/settings/cloudmessaging)
+
 ## 🌐 Browser Support
 
 - Chrome (latest)

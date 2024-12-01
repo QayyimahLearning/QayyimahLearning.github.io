@@ -1,6 +1,19 @@
 import React from 'react';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 const CourseCard = ({ course, index, isDarkMode, onVideoSelect }) => {
+  const { trackEvent } = useAnalytics();
+
+  const handleVideoSelect = () => {
+    trackEvent('video_play', {
+      course_title: course.title,
+      course_instructor: course.instructor,
+      course_index: index,
+      video_link: course.link
+    });
+    onVideoSelect(course.link);
+  };
+
   return (
     <div className="card h-100" style={{
       background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
@@ -55,7 +68,7 @@ const CourseCard = ({ course, index, isDarkMode, onVideoSelect }) => {
             }}
             onMouseOver={(e) => e.target.style.transform = 'translateY(-2px)'}
             onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
-            onClick={() => onVideoSelect(course.link)}
+            onClick={handleVideoSelect}
           >
             START LEARNING
           </button>

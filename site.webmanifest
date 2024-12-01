@@ -2,6 +2,7 @@
   "name": "Qayyima Learning Platform",
   "short_name": "Qayyima",
   "description": "Learning journey for muslim students",
+  "gcm_sender_id": "706212511881",
   
   "icons": [
     {

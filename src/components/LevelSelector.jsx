@@ -1,31 +1,42 @@
 import React from 'react';
 import { motion, useAnimation } from 'framer-motion';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 const LEVELS = ['basic', 'intermediate', 'advanced'];
 
 const LevelSelector = ({ isDarkMode, activeLevel, setActiveLevel }) => {
   const controls = useAnimation();
+  const { trackEvent } = useAnalytics();
+
+  const handleLevelChange = (newLevel) => {
+    trackEvent('level_change', {
+      from_level: activeLevel,
+      to_level: newLevel,
+      method: 'button_click'
+    });
+    setActiveLevel(newLevel);
+  };
 
   const handlePrevLevel = () => {
     const currentIndex = LEVELS.indexOf(activeLevel);
     if (currentIndex > 0) {
-      setActiveLevel(LEVELS[currentIndex - 1]);
+      handleLevelChange(LEVELS[currentIndex - 1]);
     }
   };
 
   const handleNextLevel = () => {
     const currentIndex = LEVELS.indexOf(activeLevel);
     if (currentIndex < LEVELS.length - 1) {
-      setActiveLevel(LEVELS[currentIndex + 1]);
+      handleLevelChange(LEVELS[currentIndex + 1]);
     }
   };
 
   const handleDragEnd = async (event, info) => {
     const SWIPE_THRESHOLD = 50;
     if (info.offset.x > SWIPE_THRESHOLD && activeLevel !== 'basic') {
-      handlePrevLevel();
+      handleLevelChange(LEVELS[LEVELS.indexOf(activeLevel) - 1]);
     } else if (info.offset.x < -SWIPE_THRESHOLD && activeLevel !== 'advanced') {
-      handleNextLevel();
+      handleLevelChange(LEVELS[LEVELS.indexOf(activeLevel) + 1]);
     }
     // Reset position
     await controls.start({ x: 0 });

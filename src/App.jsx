@@ -18,6 +18,8 @@ import SplashScreen from './components/SplashScreen';
 import VideoPlayer from './components/VideoPlayer';
 import { usePrograms } from './hooks/usePrograms';
 import Countdown from './components/Countdown';
+import { useAnalytics } from './hooks/useAnalytics';
+import { useNotification } from './hooks/useNotification';
 
 import {
   getNextProgram,
@@ -37,12 +39,17 @@ const App = () => {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const { isPermissionGranted, requestPermission } = useNotification();
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
   
   // check for dev query param
   const isDev = new URLSearchParams(window.location.search).get('dev') === 'true';
 
   // Use the custom hook for fetching programs
   const { programs, isLoading, error } = usePrograms();
+
+  // Initialize analytics
+  useAnalytics();
 
   // Get filtered courses based on active program and level
   const getFilteredCourses = () => {
@@ -98,6 +105,15 @@ const App = () => {
   if (isDev) {
     isBeforeRelease = false;
   }
+
+  // Add notification effect
+  useEffect(() => {
+    // Check if we haven't prompted for notifications yet
+    const hasPrompted = localStorage.getItem('notificationPrompted');
+    if (!hasPrompted && !isPermissionGranted) {
+      setShowNotificationPrompt(true);
+    }
+  }, [isPermissionGranted]);
 
   // Show offline state before anything else
   if (!isOnline || error) {
@@ -158,6 +174,16 @@ const App = () => {
       setShowInstallPrompt={setShowInstallPrompt}
       logoLight={logoLight}
       logoDark={logoDark}
+      showNotificationPrompt={showNotificationPrompt}
+      onNotificationAccept={async () => {
+        await requestPermission();
+        setShowNotificationPrompt(false);
+        localStorage.setItem('notificationPrompted', 'true');
+      }}
+      onNotificationDecline={() => {
+        setShowNotificationPrompt(false);
+        localStorage.setItem('notificationPrompted', 'true');
+      }}
     >
       <ProgramHeader 
         isDarkMode={isDarkMode}

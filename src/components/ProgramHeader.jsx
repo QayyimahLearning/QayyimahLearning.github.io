@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, useAnimation } from "framer-motion";
 import { HeaderSkeleton } from './LoadingSkeleton';
+import { useAnalytics } from '../hooks/useAnalytics';
 
 const ProgramHeader = ({ 
   isDarkMode, 
@@ -13,16 +14,39 @@ const ProgramHeader = ({
 }) => {
   const programKeys = programs ? Object.keys(programs) : [];
   const controls = useAnimation();
+  const { trackEvent } = useAnalytics();
+
+  const handleProgramChange = (newProgram, method) => {
+    if (newProgram !== activeProgram) {
+      trackEvent('program_change', {
+        from_program: activeProgram,
+        to_program: newProgram,
+        program_title: programs?.[newProgram]?.pTitle,
+        method: method
+      });
+      setActiveProgram(newProgram);
+    }
+  };
 
   const handleDragEnd = async (event, info) => {
     const SWIPE_THRESHOLD = 50;
     if (info.offset.x > SWIPE_THRESHOLD && !isLoading) {
-      getPrevProgram();
+      const prevProgram = programKeys[programKeys.indexOf(activeProgram) - 1];
+      if (prevProgram) {
+        handleProgramChange(prevProgram, 'swipe');
+      }
     } else if (info.offset.x < -SWIPE_THRESHOLD && !isLoading) {
-      getNextProgram();
+      const nextProgram = programKeys[programKeys.indexOf(activeProgram) + 1];
+      if (nextProgram) {
+        handleProgramChange(nextProgram, 'swipe');
+      }
     }
     // Reset position
     await controls.start({ x: 0 });
+  };
+
+  const handleDotClick = (key) => {
+    handleProgramChange(key, 'dot_navigation');
   };
 
   return (
@@ -95,7 +119,7 @@ const ProgramHeader = ({
         {programKeys.map((key) => (
           <button
             key={key}
-            onClick={() => setActiveProgram(key)}
+            onClick={() => handleDotClick(key)}
             className="btn p-0"
             style={{ width: '10px', height: '10px' }}
           >
