@@ -22,11 +22,18 @@ export const requestNotificationPermission = async () => {
       throw new Error('Notification permission was denied');
     }
 
+    // Wait for service worker registration
+    const registration = await navigator.serviceWorker.ready;
+    if (!registration) {
+      throw new Error('No service worker registration found');
+    }
+
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
       try {
         const token = await getToken(messaging, {
-          vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY
+          vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
+          serviceWorkerRegistration: registration
         });
         
         if (token) {
