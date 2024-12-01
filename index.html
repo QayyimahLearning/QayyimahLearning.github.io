@@ -52,10 +52,62 @@
           a.appendChild(r);
       })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
     </script>
+
+    <!-- Styles -->
+    <style>
+      #initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+        z-index: 9999;
+      }
+    
+      #initial-loader.hidden {
+        display: none;
+      }
+    
+      .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #333;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        animation: rotation 1s linear infinite;
+      }
+    
+      @keyframes rotation {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
+    <div id="initial-loader">
+      <div class="loader"></div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    
+    <!-- Add the loader script here -->
+    <script>
+      window.addEventListener('load', function() {
+        // Give a small delay to ensure React has started rendering
+        setTimeout(function() {
+          const loader = document.getElementById('initial-loader');
+          if (loader) {
+            loader.classList.add('hidden');
+          }
+        }, 500);
+      });
+    </script>
+
+    <!-- Service worker registration -->
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
