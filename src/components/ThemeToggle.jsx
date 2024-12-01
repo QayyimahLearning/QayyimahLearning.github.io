@@ -10,21 +10,18 @@ const ThemeToggle = () => {
       onClick={toggleTheme}
       aria-label="Toggle theme"
       style={{
-        position: 'fixed',
-        top: '1rem',
-        right: '1rem',
+        position: 'relative',
         background: 'none',
         border: 'none',
         padding: '8px',
         cursor: 'pointer',
-        zIndex: 1000,
         color: isDarkMode ? '#fff' : '#2c3e50'
       }}
     >
       {isDarkMode ? (
-        <i className="bi bi-sun-fill fs-4"></i>
+        <i className="bi bi-sun-fill fs-5"></i>
       ) : (
-        <i className="bi bi-moon-fill fs-4"></i>
+        <i className="bi bi-moon-fill fs-5"></i>
       )}
     </button>
   );

@@ -40,18 +40,23 @@
 
 /* Theme toggle button */
 .theme-toggle-btn {
+  position: fixed;
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
-  position: relative;
-  width: 35px;
-  height: 35px;
   border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: transparent;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.notification-btn {
+  position: fixed;
+  background-color: transparent;
+  border: none;
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
@@ -67,6 +72,23 @@
 
 .theme-toggle-btn:active {
   transform: scale(0.95);
+}
+
+.notification-btn:hover {
+  transform: scale(1.1);
+}
+
+.notification-btn:active {
+  transform: scale(0.95);
+}
+
+.notification-panel {
+  position: fixed;
+  width: 450px;
+  max-height: 400px;
+  overflow-y: auto;
+  top: 4rem;
+  right: 1rem;
 }
 
 /* Card styles for dark mode */
