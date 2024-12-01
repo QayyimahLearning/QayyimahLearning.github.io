@@ -111,14 +111,18 @@
     <!-- Service worker registration -->
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('./sw.js')
-            .then(registration => {
-              console.log('ServiceWorker registration successful');
-            })
-            .catch(err => {
-              console.log('ServiceWorker registration failed: ', err);
-            });
+        window.addEventListener('load', async () => {
+          try {
+            // Register the main service worker
+            const registration = await navigator.serviceWorker.register('./sw.js');
+            console.log('SW registered:', registration);
+
+            // Register the Firebase messaging service worker
+            const messagingRegistration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+            console.log('Firebase messaging SW registered:', messagingRegistration);
+          } catch (error) {
+            console.log('SW registration failed:', error);
+          }
         });
       }
     </script>
