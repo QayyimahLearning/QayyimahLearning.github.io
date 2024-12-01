@@ -43,7 +43,7 @@ const App = () => {
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
   
   // check for dev query param
-  const isDev = new URLSearchParams(window.location.search).get('dev') === 'true';
+  const isDev = new URLSearchParams(window.location.search).get('devTry') === 'true';
 
   // Use the custom hook for fetching programs
   const { programs, isLoading, error } = usePrograms();
