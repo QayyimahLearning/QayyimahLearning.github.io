@@ -122,9 +122,6 @@ const NotificationCenter = ({ isDarkMode }) => {
                     <p className="small mb-1" style={{ color: isDarkMode ? '#ccc' : '#666' }}>
                       {notification.body}
                     </p>
-                    <small className="text-muted">
-                      {notification.timestamp?.toLocaleString()}
-                    </small>
                   </div>
                 ))
               )}
