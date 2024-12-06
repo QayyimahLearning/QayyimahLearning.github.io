@@ -101,10 +101,17 @@ const App = () => {
 
   // Define your release date (adjusted to IST)
   const releaseDate = "2024-12-06T09:00:00"; // 2:30 PM IST = 09:00 UTC
-  let isBeforeRelease = new Date() < new Date(releaseDate);
+  let isBeforeRelease = Date.now() < new Date(releaseDate).getTime();
   if (isDev) {
     isBeforeRelease = false;
   }
+
+  // Add console.log for debugging
+  console.log({
+    currentTime: new Date().toISOString(),
+    releaseTime: new Date(releaseDate).toISOString(),
+    isBeforeRelease
+  });
 
   // Add notification effect
   useEffect(() => {
