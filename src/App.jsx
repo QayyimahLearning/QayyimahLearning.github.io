@@ -100,7 +100,7 @@ const App = () => {
   };
 
   // Define your release date (adjusted to IST)
-  const releaseDate = "2024-12-06T09:00:00"; // 2:30 PM IST = 09:00 UTC
+  const releaseDate = "2024-12-06T09:00:00Z"; // 2:30 PM IST = 09:00 UTC
   let isBeforeRelease = Date.now() < new Date(releaseDate).getTime();
   if (isDev) {
     isBeforeRelease = false;
