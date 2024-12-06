@@ -12,8 +12,7 @@ const Countdown = ({ targetDate, timezone = 'UTC', isDarkMode }) => {
   useEffect(() => {
     const calculateTimeLeft = () => {
       const targetDateTime = new Date(targetDate);
-      const now = new Date().toLocaleString('en-US', { timeZone: timezone });
-      const currentTime = new Date(now);
+      const currentTime = new Date();
       
       const difference = targetDateTime - currentTime;
       
