@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - qayyima-firebase
+      - production
 
 jobs:
   build-and-deploy:
