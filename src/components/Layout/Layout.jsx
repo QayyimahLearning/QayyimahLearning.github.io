@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
 import ThemeToggle from '../ThemeToggle';
+import LanguageToggle from '../LanguageToggle';
+import MobileMenu from '../MobileMenu';
 import InstallPrompt from '../InstallPrompt';
 import NotificationCenter from '../NotificationCenter';
 
@@ -47,8 +49,12 @@ const Layout = ({
             </p>
           </div>
           <div className="d-flex align-items-center" style={{ gap: '0.5rem' }}>
+            <div className="d-none d-md-flex align-items-center" style={{ gap: '0.5rem' }}>
+              <LanguageToggle />
+              <ThemeToggle />
+            </div>
             <NotificationCenter isDarkMode={isDarkMode} />
-            <ThemeToggle />
+            <MobileMenu />
           </div>
         </div>
       </header>

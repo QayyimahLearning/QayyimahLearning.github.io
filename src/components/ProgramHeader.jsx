@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, useAnimation } from "framer-motion";
-import { HeaderSkeleton } from './LoadingSkeleton';
 import { useAnalytics } from '../hooks/useAnalytics';
+import { HeaderSkeleton } from './LoadingSkeleton';
 
 const ProgramHeader = ({ 
   isDarkMode, 
@@ -73,6 +73,20 @@ const ProgramHeader = ({
 
         {isLoading ? (
           <HeaderSkeleton isDarkMode={isDarkMode} />
+        ) : programKeys.length === 0 ? (
+          <motion.div 
+            className="text-center"
+          >
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="m-0"
+              style={{ fontSize: "1.75rem" }}
+            >
+              Programs Coming Soon
+            </motion.h1>
+          </motion.div>
         ) : (
           <motion.div 
             className="text-center"

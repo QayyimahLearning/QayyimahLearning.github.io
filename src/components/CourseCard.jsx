@@ -15,33 +15,32 @@ const CourseCard = ({ course, index, isDarkMode, onVideoSelect }) => {
   };
 
   return (
-    <div className="card h-100" style={{
+    <div className="course-card card h-100" style={{
       background: isDarkMode ? '#1e1e1e' : 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
       border: isDarkMode ? '1px solid #333' : '1px solid #dee2e6',
       boxShadow: isDarkMode ? '0 2px 15px rgba(0,0,0,0.2)' : '0 2px 15px rgba(0,0,0,0.05)'
     }}>
-      <div className="card-body p-3 p-md-4">
-        <div className="d-flex flex-column flex-md-row align-items-center gap-3">
+      <div className="card-body p-3">
+        <div className="d-flex flex-column align-items-center gap-3">
           <img
             src={course.imageUrl}
             alt={course.title}
-            className="rounded"
+            className="rounded w-100"
             style={{ 
-              width: "100%", 
-              maxWidth: "250px",
               height: "150px", 
               objectFit: "cover" 
             }}
           />
-          <div className="flex-grow-1 text-center text-md-start">
-            <div className="d-flex flex-column flex-md-row align-items-center mb-2 gap-2">
+
+          <div className="text-center w-100">
+            <div className="d-flex align-items-center mb-2 gap-2">
               <span 
-                className={`${isDarkMode ? 'bg-light text-dark' : 'bg-dark text-white'} rounded-circle d-inline-flex align-items-center justify-content-center`}
+                className={`${isDarkMode ? 'bg-light text-dark' : 'bg-dark text-white'} rounded-circle d-inline-flex align-items-center justify-content-center mx-3`}
                 style={{ width: "35px", height: "35px", minWidth: "35px" }}
               >
                 <span className="fw-bold">{index + 1}</span>
               </span>
-              <div>
+              <div className="text-start">
                 <h5 className={`card-title mb-1 fw-bold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
                   {course.title}
                 </h5>

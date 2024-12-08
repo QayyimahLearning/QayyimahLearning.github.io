@@ -1,4 +1,4 @@
-const API_URL = 'https://script.google.com/macros/s/AKfycbyUSdC5_dCyhIia9bVuFkHWzpmRcwL7jjX5PK_m7m2pnuL_0JQgCVD67Sxbk8culKeZ/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzNHxuW2zLr8ZxQvLytI2m2nVd6h251IqCAR-5THv41sdMmZv4pF7tNxYYXTRb-TDXy/exec';
 
 export const fetchPrograms = async () => {
   try {
@@ -11,7 +11,12 @@ export const fetchPrograms = async () => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    return data.programs;
+    
+    // Get language from sessionStorage or default to 'ml'
+    const selectedLanguage = sessionStorage.getItem('language') || 'ml';
+    
+    // Return programs for the selected language
+    return data.languages[selectedLanguage] || {};
   } catch (error) {
     console.error('Error fetching programs:', error);
     throw error;

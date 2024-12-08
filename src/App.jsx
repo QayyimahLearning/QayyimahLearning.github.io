@@ -17,7 +17,6 @@ import { CourseCardSkeleton } from './components/LoadingSkeleton';
 import SplashScreen from './components/SplashScreen';
 import VideoPlayer from './components/VideoPlayer';
 import { usePrograms } from './hooks/usePrograms';
-import Countdown from './components/Countdown';
 import { useAnalytics } from './hooks/useAnalytics';
 import { useNotification } from './hooks/useNotification';
 
@@ -41,9 +40,6 @@ const App = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const { isPermissionGranted, requestPermission } = useNotification();
   const [showNotificationPrompt, setShowNotificationPrompt] = useState(false);
-  
-  // check for dev query param
-  const isDev = new URLSearchParams(window.location.search).get('devTry') === 'true';
 
   // Use the custom hook for fetching programs
   const { programs, isLoading, error } = usePrograms();
@@ -99,20 +95,6 @@ const App = () => {
     }
   };
 
-  // Define your release date (adjusted to IST)
-  const releaseDate = "2024-12-06T09:00:00Z"; // 2:30 PM IST = 09:00 UTC
-  let isBeforeRelease = Date.now() < new Date(releaseDate).getTime();
-  if (isDev) {
-    isBeforeRelease = false;
-  }
-
-  // Add console.log for debugging
-  console.log({
-    currentTime: new Date().toISOString(),
-    releaseTime: new Date(releaseDate).toISOString(),
-    isBeforeRelease
-  });
-
   // Add notification effect
   useEffect(() => {
     // Check if we haven't prompted for notifications yet
@@ -135,40 +117,6 @@ const App = () => {
         animationLogoDark={animationLogoDark}
         animationLogoLight={animationLogoLight}
       />
-    );
-  }
-
-  // Show countdown if before release date
-  if (isBeforeRelease) {
-    return (
-      <Layout
-        showInstallPrompt={showInstallPrompt}
-        isIOS={isIOS}
-        handleInstallClick={handleInstallClick}
-        setShowInstallPrompt={setShowInstallPrompt}
-        logoLight={logoLight}
-        logoDark={logoDark}
-      >
-        <div className="container d-flex align-items-center justify-content-center" style={{ minHeight: "80vh" }}>
-          <div className="text-center">
-            <h2 
-              className={`mb-3 ${isDarkMode ? 'text-light' : 'text-dark'}`}
-            >
-              Coming Soon
-            </h2>
-            <p 
-              className={`mb-4 ${isDarkMode ? 'text-light opacity-75' : 'text-muted'}`}
-            >
-              Our platform will be available in:
-            </p>
-            <Countdown 
-              targetDate={releaseDate}
-              timezone="UTC"
-              isDarkMode={isDarkMode}
-            />
-          </div>
-        </div>
-      </Layout>
     );
   }
 
@@ -208,13 +156,14 @@ const App = () => {
         setActiveLevel={setActiveLevel}
       />
 
-      <div className="row justify-content-center g-4">
+      <div className="course-cards-container">
         {isLoading ? (
           <>
-            {[1, 2].map((skeleton) => (
-              <div key={skeleton} className="col-12 mb-4">
-                <CourseCardSkeleton isDarkMode={isDarkMode} />
-              </div>
+            {[1, 2, 3].map((skeleton) => (
+              <CourseCardSkeleton 
+                key={skeleton}
+                isDarkMode={isDarkMode} 
+              />
             ))}
           </>
         ) : (
@@ -224,14 +173,13 @@ const App = () => {
             </div>
           ) : (
             getFilteredCourses().map((course, index) => (
-              <div key={course.id} className="col-12">
-                <CourseCard 
-                  course={course}
-                  index={index}
-                  isDarkMode={isDarkMode}
-                  onVideoSelect={(link) => setSelectedVideo(getPlaylistId(link))}
-                />
-              </div>
+              <CourseCard 
+                key={course.id}
+                course={course}
+                index={index}
+                isDarkMode={isDarkMode}
+                onVideoSelect={(link) => setSelectedVideo(getPlaylistId(link))}
+              />
             ))
           )
         )}
