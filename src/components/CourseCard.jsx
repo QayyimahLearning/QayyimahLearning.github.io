@@ -27,8 +27,10 @@ const CourseCard = ({ course, index, isDarkMode, onVideoSelect }) => {
             alt={course.title}
             className="rounded w-100"
             style={{ 
-              height: "150px", 
-              objectFit: "cover" 
+              aspectRatio: "16/9",
+              width: "100%",
+              objectFit: "cover",
+              objectPosition: "center"
             }}
           />
 
