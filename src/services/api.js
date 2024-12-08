@@ -1,5 +1,7 @@
 const API_URL = 'https://script.google.com/macros/s/AKfycbzNHxuW2zLr8ZxQvLytI2m2nVd6h251IqCAR-5THv41sdMmZv4pF7tNxYYXTRb-TDXy/exec';
 
+export const LANGUAGE_CHANGE_EVENT = 'languageChange';
+
 export const fetchPrograms = async () => {
   try {
     if (!navigator.onLine) {

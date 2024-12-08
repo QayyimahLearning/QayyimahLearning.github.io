@@ -19,8 +19,8 @@ const LanguageToggle = () => {
       method: 'button_click'
     });
 
-    // Reload the page to fetch content in new language
-    window.location.reload();
+    // Dispatch custom event instead of page reload
+    window.dispatchEvent(new Event('languageChange'));
   };
 
   const LANGUAGE_LABEL = {

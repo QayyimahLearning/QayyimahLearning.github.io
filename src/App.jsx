@@ -156,7 +156,7 @@ const App = () => {
         setActiveLevel={setActiveLevel}
       />
 
-      <div className="course-cards-container">
+      <div className="course-cards-container mx-auto">
         {isLoading ? (
           <>
             {[1, 2, 3].map((skeleton) => (

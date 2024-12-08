@@ -14,7 +14,8 @@ const MobileMenu = () => {
     const newLanguage = language === 'ml' ? 'en' : 'ml';
     sessionStorage.setItem('language', newLanguage);
     setLanguage(newLanguage);
-    window.location.reload();
+    // Dispatch custom event instead of page reload
+    window.dispatchEvent(new Event('languageChange'));
   };
 
   return (
