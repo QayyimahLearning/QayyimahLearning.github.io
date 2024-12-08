@@ -1,0 +1,24 @@
+{
+  "name": "Qayyima Learning Platform",
+  "short_name": "Qayyima",
+  "description": "Learning journey for muslim students",
+  "gcm_sender_id": "706212511881",
+  
+  "icons": [
+    {
+      "src": "./android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "scope": "/",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}

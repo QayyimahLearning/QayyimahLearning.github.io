@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Learn Islam with our comprehensive student journey platform. Access Islamic studies, Quran lessons, and educational resources to enhance your spiritual knowledge.">
+    <meta name="keywords" content="Islamic studies, Quran learning, Malayalam Islamic education, Islamic courses online, Qayyimah Learning">
+    <meta name="author" content="Qayyimah Learning">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Title -->
+    <title>Qayyimah Learning - Islamic Studies & Quran Education in Malayalam</title>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://qayyimahlearning.github.io">
+    
+    <!-- Favicon/Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
+    <link rel="icon" type="favicon/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="./android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="./android-chrome-512x512.png">
+    <link rel="manifest" href="./site.webmanifest">
+
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="Qayyimah Learning - Islamic Studies & Quran Education">
+    <meta property="og:site_name" content="Qayyimah Learning">
+    <meta property="og:description" content="A new digital space offering classical and authentic Islamic knowledge in Malayalam. Learn Quran, Islamic studies, and more.">
+    <meta property="og:image" content="https://qayyimahlearning.github.io/og-image.jpg">
+    <meta property="og:url" content="https://qayyimahlearning.github.io">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Qayyimah Learning - Islamic Studies & Quran Education">
+    <meta name="twitter:description" content="A new digital space offering classical and authentic Islamic knowledge in Malayalam. Learn Quran, Islamic studies, and more.">
+    <meta name="twitter:image" content="https://qayyimahlearning.github.io/og-image.jpg">
+    <meta property="twitter:domain" content="qayyimahlearning.github.io">
+    <meta property="twitter:url" content="https://qayyimahlearning.github.io">
+    
+    <!-- Analytics -->
+    <meta name="google-analytics" content="G-VL0Y6CNV02">
+    <script>
+      (function(h,o,t,j,a,r){
+          h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+          h._hjSettings={hjid:5226321,hjsv:6};
+          a=o.getElementsByTagName('head')[0];
+          r=o.createElement('script');r.async=1;
+          r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+          a.appendChild(r);
+      })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
+
+    <!-- Styles -->
+    <style>
+      #initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff;
+        z-index: 9999;
+      }
+    
+      #initial-loader.hidden {
+        display: none;
+      }
+    
+      .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #333;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        animation: rotation 1s linear infinite;
+      }
+    
+      @keyframes rotation {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+    <script type="module" crossorigin src="/assets/index-Bwa-vY86.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BZNO94em.css">
+  </head>
+  <body>
+    <div id="initial-loader">
+      <div class="loader"></div>
+    </div>
+    <div id="root"></div>
+    
+    <!-- Add the loader script here -->
+    <script>
+      window.addEventListener('load', function() {
+        // Give a small delay to ensure React has started rendering
+        setTimeout(function() {
+          const loader = document.getElementById('initial-loader');
+          if (loader) {
+            loader.classList.add('hidden');
+          }
+        }, 500);
+      });
+    </script>
+
+    <!-- Service worker registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', async () => {
+          try {
+            // Register the main service worker
+            const registration = await navigator.serviceWorker.register('./sw.js');
+            console.log('SW registered:', registration);
+
+            // Register the Firebase messaging service worker
+            const messagingRegistration = await navigator.serviceWorker.register('./firebase-messaging-sw.js');
+            console.log('Firebase messaging SW registered:', messagingRegistration);
+          } catch (error) {
+            console.log('SW registration failed:', error);
+          }
+        });
+      }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "EducationalOrganization",
+      "name": "Qayyimah Learning",
+      "description": "Islamic education platform in Malayalam",
+      "teaches": ["Islamic Studies", "Quran", "Islamic Education"],
+      "language": ["Malayalam", "Arabic"],
+      "url": "https://qayyimahlearning.github.io",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "India",
+        "addressLocality": "Kerala"
+      }
+    }
+    </script>
+  </body>
+</html>
