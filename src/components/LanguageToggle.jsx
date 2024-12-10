@@ -24,7 +24,7 @@ const LanguageToggle = () => {
   };
 
   const LANGUAGE_LABEL = {
-    ml: 'മലയാലം',
+    ml: 'മലയാളം',
     en: 'English',
     ar: 'عربي'
   }

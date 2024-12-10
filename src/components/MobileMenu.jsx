@@ -80,7 +80,7 @@ const MobileMenu = () => {
               transition: 'all 0.3s ease'
             }}
           >
-            {language === 'ml' ? 'മലയാലം' : 'English'}
+            {language === 'ml' ? 'മലയാളം' : 'English'}
           </button>
         </div>
       </div>
