@@ -33,7 +33,7 @@ const App = () => {
   const isOnline = useOnlineStatus();
   const [activeLevel, setActiveLevel] = useState('basic');
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [activeProgram, setActiveProgram] = useState('aqeeda');
+  const [activeProgram, setActiveProgram] = useState(null);
   const [showSplash, setShowSplash] = useState(true);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
@@ -103,6 +103,12 @@ const App = () => {
       setShowNotificationPrompt(true);
     }
   }, [isPermissionGranted]);
+
+  useEffect(() => {
+    if (programs && Object.keys(programs).length > 0) {
+      setActiveProgram(Object.keys(programs)[0]);
+    }
+  }, [programs]);
 
   // Show offline state before anything else
   if (!isOnline || error) {
