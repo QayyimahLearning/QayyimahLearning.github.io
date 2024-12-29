@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.qayyimahlearning.twa",
+        "sha256_cert_fingerprints": ["07:F5:6A:71:D1:92:A4:73:82:75:7C:5D:2C:B9:25:86:FF:52:C0:1D:DF:9C:FE:83:9C:18:8C:37:15:7C:4B:67"]
+      }
+    }]
