@@ -16,11 +16,8 @@ const MobileMenu = () => {
 
   const handleClose = () => setIsOpen(false);
 
-  const handleLanguageChange = () => {
-    // Cycle through languages: ml -> en -> ar -> ml
-    const languageOrder = ['ml', 'en', 'ar'];
-    const currentIndex = languageOrder.indexOf(language);
-    const newLanguage = languageOrder[(currentIndex + 1) % languageOrder.length];
+  const handleLanguageChange = (newLanguage) => {
+    if (newLanguage === language) return;
     
     sessionStorage.setItem('language', newLanguage);
     setLanguage(newLanguage);
@@ -78,20 +75,27 @@ const MobileMenu = () => {
 
         <div className="mobile-menu-item">
           <span className="mobile-menu-label">Language</span>
-          <button 
-            onClick={handleLanguageChange}
-            className="btn"
-            style={{
-              background: isDarkMode 
-                ? 'white'
-                : 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)',
-              color: isDarkMode ? '#1e1e1e' : 'white',
-              border: 'none',
-              transition: 'all 0.3s ease'
-            }}
-          >
-            {LANGUAGE_LABEL[language]}
-          </button>
+          <div className="d-flex flex-column gap-2">
+            {Object.entries(LANGUAGE_LABEL).map(([code, label]) => (
+              <button
+                key={code}
+                onClick={() => handleLanguageChange(code)}
+                className={`btn ${code === language ? 'active' : ''}`}
+                style={{
+                  background: code === language
+                    ? (isDarkMode ? 'white' : 'linear-gradient(135deg, #2c3e50 0%, #1a252f 100%)')
+                    : 'transparent',
+                  color: code === language
+                    ? (isDarkMode ? '#1e1e1e' : 'white')
+                    : (isDarkMode ? 'white' : '#2c3e50'),
+                  border: code === language ? 'none' : '1px solid currentColor',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </>
