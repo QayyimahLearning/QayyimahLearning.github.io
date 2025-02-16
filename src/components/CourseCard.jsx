@@ -43,7 +43,17 @@ const CourseCard = ({ course, index, isDarkMode, onVideoSelect }) => {
                 <span className="fw-bold">{index + 1}</span>
               </span>
               <div className="text-start">
-                <h5 className={`card-title mb-1 fw-bold ${isDarkMode ? 'text-white' : 'text-dark'}`}>
+                <h5 
+                  className={`card-title mb-1 fw-bold ${isDarkMode ? 'text-white' : 'text-dark'}`}
+                  style={{ 
+                    minHeight: '48px',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    lineHeight: '24px'
+                  }}
+                >
                   {course.title}
                 </h5>
                 <p className={`card-text mb-0 ${isDarkMode ? 'text-light' : 'text-secondary'}`}>

@@ -379,3 +379,24 @@ body::-webkit-scrollbar {
 .mobile-menu {
   padding-top: 4rem;
 }
+
+/* RTL Support for Arabic */
+[dir="rtl"] .mobile-menu {
+  left: -250px;
+  right: auto;
+}
+
+[dir="rtl"] .mobile-menu.open {
+  left: 0;
+  right: auto;
+}
+
+[dir="rtl"] .mobile-menu-close {
+  left: 1rem;
+  right: auto;
+}
+
+/* Add support for Arabic font */
+.ar {
+  font-family: 'Noto Sans Arabic', sans-serif;
+}

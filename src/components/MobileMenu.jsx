@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { useTheme } from '../contexts/ThemeContext';
 
+const LANGUAGE_LABEL = {
+  ml: 'മലയാളം',
+  en: 'English',
+  ar: 'عربي'
+};
+
 const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
@@ -11,7 +17,11 @@ const MobileMenu = () => {
   const handleClose = () => setIsOpen(false);
 
   const handleLanguageChange = () => {
-    const newLanguage = language === 'ml' ? 'en' : 'ml';
+    // Cycle through languages: ml -> en -> ar -> ml
+    const languageOrder = ['ml', 'en', 'ar'];
+    const currentIndex = languageOrder.indexOf(language);
+    const newLanguage = languageOrder[(currentIndex + 1) % languageOrder.length];
+    
     sessionStorage.setItem('language', newLanguage);
     setLanguage(newLanguage);
     // Dispatch custom event instead of page reload
@@ -80,7 +90,7 @@ const MobileMenu = () => {
               transition: 'all 0.3s ease'
             }}
           >
-            {language === 'ml' ? 'മലയാളം' : 'English'}
+            {LANGUAGE_LABEL[language]}
           </button>
         </div>
       </div>

@@ -8,7 +8,11 @@ const LanguageToggle = () => {
   );
 
   const handleLanguageChange = () => {
-    const newLanguage = language === 'ml' ? 'en' : 'ml';
+    // Cycle through languages: ml -> en -> ar -> ml
+    const languageOrder = ['ml', 'en', 'ar'];
+    const currentIndex = languageOrder.indexOf(language);
+    const newLanguage = languageOrder[(currentIndex + 1) % languageOrder.length];
+    
     sessionStorage.setItem('language', newLanguage);
     setLanguage(newLanguage);
     
