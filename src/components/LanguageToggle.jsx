@@ -5,7 +5,7 @@ const LanguageToggle = () => {
   const { trackEvent } = useAnalytics();
   const [showDropdown, setShowDropdown] = useState(false);
   const [language, setLanguage] = React.useState(
-    sessionStorage.getItem('language') || 'ml'
+    localStorage.getItem('language') || 'ml'
   );
 
   const LANGUAGE_LABEL = {
@@ -23,7 +23,7 @@ const LanguageToggle = () => {
       method: 'dropdown_select'
     });
 
-    sessionStorage.setItem('language', newLanguage);
+    localStorage.setItem('language', newLanguage);
     setLanguage(newLanguage);
     setShowDropdown(false);
     

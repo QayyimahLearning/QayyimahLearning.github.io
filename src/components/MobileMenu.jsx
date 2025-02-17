@@ -11,7 +11,7 @@ const MobileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { isDarkMode, toggleTheme } = useTheme();
   const [language, setLanguage] = useState(
-    sessionStorage.getItem('language') || 'ml'
+    localStorage.getItem('language') || 'ml'
   );
 
   const handleClose = () => setIsOpen(false);
@@ -19,7 +19,7 @@ const MobileMenu = () => {
   const handleLanguageChange = (newLanguage) => {
     if (newLanguage === language) return;
     
-    sessionStorage.setItem('language', newLanguage);
+    localStorage.setItem('language', newLanguage);
     setLanguage(newLanguage);
     // Dispatch custom event instead of page reload
     window.dispatchEvent(new Event('languageChange'));

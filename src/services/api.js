@@ -15,7 +15,7 @@ export const fetchPrograms = async () => {
     const data = await response.json();
     
     // Get language from sessionStorage or default to 'ml'
-    const selectedLanguage = sessionStorage.getItem('language') || 'ml';
+    const selectedLanguage = localStorage.getItem('language') || 'ml';
     
     // Return programs for the selected language
     return data.languages[selectedLanguage] || {};

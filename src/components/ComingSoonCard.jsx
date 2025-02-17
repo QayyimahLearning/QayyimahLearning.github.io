@@ -8,7 +8,7 @@ const ComingSoonCard = ({ isDarkMode }) => {
       boxShadow: isDarkMode ? '0 2px 15px rgba(0,0,0,0.2)' : '0 2px 15px rgba(0,0,0,0.05)'
     }}>
       <div className="card-body p-5">
-        <i className="bi bi-clock-history fs-1 mb-3"></i>
+        <i className={`bi bi-clock-history fs-1 mb-3 ${isDarkMode ? 'text-light' : 'text-dark'}`}></i>
         <h3 className={`fw-bold ${isDarkMode ? 'text-light' : 'text-dark'}`}>Coming Soon</h3>
         <p className={`mb-0 ${isDarkMode ? 'text-light opacity-75' : 'text-muted'}`}>
           We're working on adding new courses for this level.
